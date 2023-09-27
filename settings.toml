@@ -1,0 +1,6 @@
+[default]
+BITMAPIST_SYSTEM_NAME = "default"
+BITMAPIST_REDIS_URL = "redis://redisuser:redispass@redisserver/0"
+REDIS_URL = "redis://redisuser:redispass@redisserver/0"
+LOG_TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%zZ"
+SECRET_KEY = "replace-with-secret-key"
