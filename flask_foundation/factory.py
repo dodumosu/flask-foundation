@@ -160,6 +160,8 @@ def setup_extensions(app: Flask) -> None:
     extensions.cache.init_app(app)
     extensions.csrf.init_app(app)
     extensions.db.init_app(app)
+    if app.debug and extensions.debug_toolbar:
+        extensions.debug_toolbar.init_app(app)
     extensions.mail.init_app(app)
 
     datastore = SQLAlchemyUserDatastore(extensions.db, User, Role)
