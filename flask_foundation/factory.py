@@ -7,9 +7,10 @@ from bitmapist import SYSTEMS
 from dynaconf import FlaskDynaconf
 from flask import Flask, Response, request
 from flask_request_id import RequestID
+from flask_security.datastore import SQLAlchemyUserDatastore
 from redis import StrictRedis
 
-from flask_foundation import config, loggers, utils
+from flask_foundation import config, extensions, loggers, utils
 
 
 def create_app(custom_settings: dict = None) -> Flask:
@@ -26,9 +27,33 @@ def create_app(custom_settings: dict = None) -> Flask:
         dynaconf_instance=config.settings,
     )
 
+    # other settings
+    cache_redis_url = (
+        config.settings.default.get("CACHE_REDIS_URL")
+        or config.settings.default.REDIS_URL
+    )
+    session_redis_url = (
+        config.settings.default.get("SESSION_REDIS_URL")
+        or config.settings.default.REDIS_URL
+    )
+    additional_settings = {
+        "CACHE_REDIS_URL": cache_redis_url,
+        "CACHE_TYPE": "RedisCache",
+        "SESSION_TYPE": "redis",
+        "SESSION_REDIS": StrictRedis.from_url(session_redis_url),
+        "SESSION_USE_SIGNER": True,
+    }
+    # NOTE: hack. for some reason, some values don't make it into
+    # the FlaskDynaconf instance, for example, SQLALCHEMY_DATABASE_URI
+    additional_settings.update(config.settings.default.to_dict())
+
     # override settings
-    if custom_settings:
-        app.config.from_mapping(custom_settings)
+    override_settings = custom_settings.copy() if custom_settings else {}
+    override_settings.update(additional_settings)
+    app.config.from_mapping(override_settings)
+
+    # set up extensions
+    setup_extensions(app)
 
     logger = structlog.get_logger()
 
@@ -126,3 +151,18 @@ def setup_logging() -> None:
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
+
+
+def setup_extensions(app: Flask) -> None:
+    from flask_foundation.auth.models import Role, User
+
+    extensions.cors.init_app(app)
+    extensions.cache.init_app(app)
+    extensions.csrf.init_app(app)
+    extensions.db.init_app(app)
+    extensions.mail.init_app(app)
+
+    datastore = SQLAlchemyUserDatastore(extensions.db, User, Role)
+    # register the security blueprint if you need it
+    extensions.security.init_app(app, datastore, False)
+    extensions.talisman.init_app(app)

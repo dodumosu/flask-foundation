@@ -1,4 +1,14 @@
 [default]
+MAIL_SERVER = "localhost"
+MAIL_PORT = 25
+MAIL_USERNAME = ""
+MAIL_PASSWORD = ""
+MAIL_USE_TLS = false
+MAIL_USE_SSL = false
+SECURITY_PASSWORD_HASH = "replaceme"
+SESSION_REDIS_URL = "redis://redisuser:redispass@redisserver/0"
+CACHE_REDIS_URL = "redis://redisuser:redispass@redisserver/0"
+SQLALCHEMY_DATABASE_URI = "postgresql+psycopg://postgres:postgrespass@dbserver/dbname"
 BITMAPIST_SYSTEM_NAME = "default"
 BITMAPIST_REDIS_URL = "redis://redisuser:redispass@redisserver/0"
 REDIS_URL = "redis://redisuser:redispass@redisserver/0"

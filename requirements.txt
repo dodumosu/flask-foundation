@@ -336,6 +336,9 @@ redis==4.6.0 ; python_version >= "3.10" and python_version < "3.12" \
 redis[hiredis]==4.6.0 ; python_version >= "3.10" and python_version < "3.12" \
     --hash=sha256:585dc516b9eb042a619ef0a39c3d7d55fe81bdb4df09a52c9cdde0d07bf1aa7d \
     --hash=sha256:e2b03db868160ee4591de3cb90d40ebb50a90dd302138775937f6a42b7ed183c
+shortuuid==1.0.11 ; python_version >= "3.10" and python_version < "3.12" \
+    --hash=sha256:27ea8f28b1bd0bf8f15057a3ece57275d2059d2b0bb02854f02189962c13b6aa \
+    --hash=sha256:fc75f2615914815a8e4cb1501b3a513745cb66ef0fd5fc6fb9f8c3fa3481f789
 six==1.16.0 ; python_version >= "3.10" and python_version < "3.12" \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
