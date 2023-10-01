@@ -4,7 +4,6 @@ import logging.config
 
 import structlog
 from bitmapist import SYSTEMS
-from dynaconf import FlaskDynaconf
 from flask import Flask, Response, request
 from flask_request_id import RequestID
 from flask_security.datastore import SQLAlchemyUserDatastore
@@ -19,13 +18,6 @@ def create_app(custom_settings: dict = None) -> Flask:
 
     app = Flask(__name__, instance_relative_config=True)
     RequestID(app=app, generator_func=utils.generate_uuid_string)
-
-    # configure the application instance
-    FlaskDynaconf(
-        app=app,
-        instance_relative_config=True,
-        dynaconf_instance=config.settings,
-    )
 
     # other settings
     cache_redis_url = (
