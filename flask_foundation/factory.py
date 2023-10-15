@@ -10,6 +10,7 @@ from flask_security.datastore import SQLAlchemyUserDatastore
 from redis import StrictRedis
 
 from flask_foundation import config, extensions, loggers, utils
+from flask_foundation.db.sessions import db_session
 
 
 def create_app(custom_settings: dict = None) -> Flask:
@@ -66,6 +67,10 @@ def create_app(custom_settings: dict = None) -> Flask:
         )
 
         return response
+
+    @app.teardown_request
+    def teardown_session(exception: Exception = None):
+        db_session.remove()
 
     return app
 
